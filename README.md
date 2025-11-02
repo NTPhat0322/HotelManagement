@@ -10,7 +10,7 @@
 ### 🔐 Authentication & Authorization
 
 - Secure login/register (JWT-based)
-- Role-based access control (Admin, Receptionist, Guest)
+- Role-based access control (Admin, Manager, Receptionist, Guest)
 
 ### 🏠 Hotel Operations
 
