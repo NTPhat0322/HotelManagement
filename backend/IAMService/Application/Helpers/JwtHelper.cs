@@ -1,7 +1,11 @@
 ﻿
 
 using Domain.Aggregate;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Application.Helpers
 {
@@ -10,13 +14,33 @@ namespace Application.Helpers
         private static readonly string JwtKey = Environment.GetEnvironmentVariable("JWT_KEY")!;
         private static readonly string JwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER")!;
         private static readonly string JwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE")!;
-    
-        //public static string CreateToken(User user)
-        //{
-        //    var claims = new List<Claim>
-        //    {
+        private static readonly string JwtExpireMinutes = Environment.GetEnvironmentVariable("JWT_EXPIRY_MINUTES")!;
 
-        //    };
-        //}
+        public static string CreateToken(User user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim("userId", user.UserId.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
+                new Claim(ClaimTypes.Name, user.UserName.ToString()),
+                new Claim(ClaimTypes.Role, user.Role.RoleName)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+
+            var tokenDescriptor = new JwtSecurityToken(
+                issuer: JwtIssuer,
+                audience: JwtAudience,
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(double.Parse(JwtExpireMinutes)),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor); ;
+        }
+
+
     }
 }
