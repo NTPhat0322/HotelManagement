@@ -22,6 +22,10 @@ namespace Infrastructure.Data
             modelBuilder.Owned<FullName>();
             modelBuilder.Entity<User>(entity =>
             {
+                entity.Property(u => u.Email)
+                    .HasMaxLength(255);
+                entity.Property(u => u.PhoneNumber)
+                    .HasMaxLength(20);
                 entity
                     .HasOne(u => u.Role)
                     .WithMany(r => r.Users)
