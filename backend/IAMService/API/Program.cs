@@ -1,6 +1,8 @@
 using API.Middleware;
 using DotNetEnv;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -41,6 +43,11 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+
+//database
+var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+builder.Services.AddDbContext<IAMServiceDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
 //JWT
 var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");

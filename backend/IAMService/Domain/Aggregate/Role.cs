@@ -14,7 +14,11 @@ namespace Domain.Aggregate
         public Guid RoleId { get; private set; } = Guid.NewGuid();
         [Required]
         public string RoleName { get; private set; } = string.Empty;
-        
+
+        // Navigation property
+        private readonly List<User> _users = new();
+        public IReadOnlyCollection<User> Users => _users.AsReadOnly();
+
         private Role() { }
         public Role(string roleName)
         {

@@ -10,7 +10,8 @@ namespace Domain.Aggregate
         public Guid UserId { get; private set; } = Guid.NewGuid();
         [EmailAddress, Required]
         public string Email { get; private set; } = string.Empty;
-        public string? PhoneNumber { get; private set; }
+        [Required]
+        public string PhoneNumber { get; private set; } = string.Empty;
         [Required]
         public string HashedPassword { get; private set; } = string.Empty;
         [Required]
@@ -18,9 +19,14 @@ namespace Domain.Aggregate
         public DateTime? DateOfBirth { get; private set; }
         public Address Address { get; private set; } = null!;
 
+        //navigation property
+        [Required]
+        public Guid RoleId { get; private set; }
+        public Role Role { get; private set; } = null!;
+
         private User() { }
         public User(string email, string hashedPassword, string firstName, string lastName,
-            string? phoneNumber = null, DateTime? dateOfBirth = null, int number = 0, string street = "",
+            string phoneNumber = "", DateTime? dateOfBirth = null, int number = 0, string street = "",
             string district = "", string city = "", string country = "")
         {
             Email = email;
