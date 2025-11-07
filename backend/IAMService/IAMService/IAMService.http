@@ -1,6 +1,0 @@
-@IAMService_HostAddress = http://localhost:5147
-
-GET {{IAMService_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
