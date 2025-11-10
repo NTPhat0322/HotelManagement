@@ -10,9 +10,12 @@ namespace Infrastructure.Repositories
         private readonly IAMServiceDbContext _context;
         private IDbContextTransaction? _transaction;
 
-        public UnitOfWork(IAMServiceDbContext context)
+        public IUserRepository UserRepository { get; }
+
+        public UnitOfWork(IAMServiceDbContext context, IUserRepository userRepository)
         {
             _context = context;
+            UserRepository = userRepository;
         }
 
         public async Task BeginTransactionAsync()

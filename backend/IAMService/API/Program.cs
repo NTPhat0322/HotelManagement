@@ -1,11 +1,18 @@
+using API.FluentValidation;
 using API.Middleware;
+using Application.DTOs.Requests;
+using Application.Interfaces;
+using Application.Services;
+using Domain.Repositories;
 using DotNetEnv;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Infrastructure.Data;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System;
 using System.Text;
 
 Env.Load();
@@ -70,6 +77,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
+
+//DI
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+
+//DI for FluentValidation
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddTransient<IValidator<RegisterRequest>, RegisterUserValidator>();
 
 var app = builder.Build();
 

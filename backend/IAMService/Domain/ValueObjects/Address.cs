@@ -24,5 +24,28 @@ namespace Domain.ValueObjects
             City = city;
             Country = country;
         }
+        //number setter
+        public void SetNumber(int number)
+        {
+            Number = number;
+        }
+        //street setter
+        public void SetStreet(string street)
+        {
+            Street = street;
+        }
+        //district setter
+        public void SetDistrict(string district)
+        {
+            District = district;
+        }
+        public void SetCity(string city)
+        {
+            City = city;
+        }
+        public void SetCountry(string country)
+        {
+            Country = country;
+        }   
     }
 }

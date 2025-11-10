@@ -9,7 +9,7 @@ namespace Domain.Repositories
     public interface IUnitOfWork : IDisposable
     {
         //repo
-
+        public IUserRepository UserRepository { get; }
         //----
         Task BeginTransactionAsync();
         Task<int> CommitTransactionAsync();

@@ -20,5 +20,16 @@ namespace Domain.ValueObjects
         {
             return $"{FirstName} {LastName}";
         }
+
+        //first name setter
+        public void SetFirstName(string firstName)
+        {
+            FirstName = firstName;
+        }
+        //last name setter
+        public void SetLastName(string lastName)
+        {
+            LastName = lastName;
+        }
     }
 }
