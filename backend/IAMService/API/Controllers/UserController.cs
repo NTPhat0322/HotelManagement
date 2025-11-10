@@ -13,7 +13,9 @@ namespace API.Controllers
         public async Task<IActionResult> RegisterUser([FromBody] RegisterRequest request)
         {
             var response = await userService.RegisterUserAsync(request);
-            return Ok(response);
+            return response.IsSuccess 
+                ? Ok(response) 
+                : BadRequest(response);
         }
     }
 }
