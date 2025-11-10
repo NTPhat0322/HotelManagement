@@ -1,11 +1,12 @@
 ﻿
 using Application.DTOs.Requests;
 using Application.DTOs.Responses;
+using Application.Helpers;
 
 namespace Application.Interfaces
 {
     public interface IUserService
     {
-        Task<RegisterResponse> RegisterUserAsync(RegisterRequest request);
+        Task<GenericResult<RegisterResponse>> RegisterUserAsync(RegisterRequest request);
     }
 }

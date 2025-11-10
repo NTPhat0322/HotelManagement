@@ -19,17 +19,18 @@ namespace Application.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest request)
+        public async Task<GenericResult<RegisterResponse>> RegisterUserAsync(RegisterRequest request)
         {
             await _unitOfWork.BeginTransactionAsync();
             //kiểm tra xem email và số điện thoại đã tồn tại chưa
             var user = await _unitOfWork.UserRepository.GetUserByEmailAsync(request.Email);
             if (user is not null)
-                throw new Exception("Email already exists.");
+                //throw new Exception("Email already exists.");
+                return GenericResult<RegisterResponse>.Failure("Email already exists.");
             user = null;
             user = await _unitOfWork.UserRepository.GetUserByPhoneNumber(request.PhoneNumber);
             if (user is not null)
-                throw new Exception("Phone number already exists.");
+                return GenericResult<RegisterResponse>.Failure("Phone number already exists.");
             //tạo user mới
             //1. hash password
             var hashedPassword = PasswordHasher.HashPassword(request.Password);
@@ -45,13 +46,13 @@ namespace Application.Services
             await _unitOfWork.UserRepository.AddAsync(newUser);
             int rs = await _unitOfWork.CommitTransactionAsync();
             if(rs <= 0)
-                throw new Exception("Register user failed.");
-            return new RegisterResponse()
+                throw new Exception("Register user failed by saving db.");
+            return GenericResult<RegisterResponse>.Success(new RegisterResponse
             {
                 UserId = newUser.UserId.ToString(),
-                AccessToken = accessToken,
+                AccessToken =  accessToken,
                 RefreshToken = refreshToken
-            };
+            }, "Register user successfully.");
         }
     }
 }

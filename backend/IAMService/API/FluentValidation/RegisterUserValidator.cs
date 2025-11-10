@@ -28,6 +28,7 @@ namespace API.FluentValidation
             //optional fields
             RuleFor(r => r.DateOfBirth)
                 .LessThanOrEqualTo(_ => DateTime.Now.AddYears(-10)).WithMessage("User must be at least 10 years old")
+                //Dùng biểu thức lambda để lấy thời gian hiện tại tại thời điểm validate:
                 .When(r => r.DateOfBirth.HasValue);
             RuleFor(r => r.AddressNumber)
                 .GreaterThan(0).When(r => r.AddressNumber.HasValue) //address khác null thì mới 
