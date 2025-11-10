@@ -36,5 +36,45 @@ namespace Domain.Aggregate
             DateOfBirth = dateOfBirth;
             Address = new Address(number, street, district, city, country);
         }
+
+        //email setter
+        public void SetEmail(string email)
+        {
+            Email = email;
+        }
+        //phone number setter
+        public void SetPhoneNumber(string phoneNumber)
+        {
+            PhoneNumber = phoneNumber;
+        }
+        //hashed password setter
+        public void SetHashedPassword(string hashedPassword)
+        {
+            HashedPassword = hashedPassword;
+        }
+        //username setter
+        public void SetUserName(string firstName = "", string lastName = "")
+        {
+            UserName.SetFirstName(firstName);
+            UserName.SetLastName(lastName);
+        }
+        //date of birth setter
+        public void SetDateOfBirth(DateTime? dateOfBirth)
+        {
+            DateOfBirth = dateOfBirth;
+        }
+        public void SetAddress(int number = 0, string street = "",
+            string district = "", string city = "", string country = "")
+        {
+            Address.SetNumber(number);
+            Address.SetStreet(street);
+            Address.SetDistrict(district);
+            Address.SetCity(city);
+            Address.SetCountry(country);
+        }
+        public void SetRole(Role role)
+        {
+            Role = role;
+        }
     }
 }
