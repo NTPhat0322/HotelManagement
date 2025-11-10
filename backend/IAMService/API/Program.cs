@@ -83,11 +83,13 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
-
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 //DI for FluentValidation
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddTransient<IValidator<RegisterRequest>, RegisterUserValidator>();
+builder.Services.AddTransient<IValidator<CreateRoleRequest>, CreateRoleValidator>();
 
 var app = builder.Build();
 

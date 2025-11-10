@@ -33,7 +33,10 @@ namespace Application.Services
             //tạo user mới
             //1. hash password
             var hashedPassword = PasswordHasher.HashPassword(request.Password);
+            //get role user
+            var roleUser = await _unitOfWork.RoleRepository.GetRoleByNameAsync("User");
             var newUser = new User(request.Email, hashedPassword, request.FirstName, request.LastName, request.PhoneNumber, request.DateOfBirth, request.AddressNumber ?? 0, request.Street, request.District, request.City, request.Country);
+            newUser.SetRole(roleUser!);
             //2. tạo refreshtoken
             var refreshToken = RefreshTokenHelper.GenerateRefreshToken();
             //3. tạo access token

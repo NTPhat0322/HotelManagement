@@ -30,7 +30,8 @@ namespace API.FluentValidation
                 .LessThanOrEqualTo(_ => DateTime.Now.AddYears(-10)).WithMessage("User must be at least 10 years old")
                 .When(r => r.DateOfBirth.HasValue);
             RuleFor(r => r.AddressNumber)
-                .GreaterThan(0).When(r => r.AddressNumber.HasValue)
+                .GreaterThan(0).When(r => r.AddressNumber.HasValue) //address khác null thì mới 
+                                                                    //thực hiện so sánh giá trị
                 .WithMessage("Address number must be greater than 0");
             RuleFor(r => r.Street)
                 .MaximumLength(100).When(r => !string.IsNullOrEmpty(r.Street))

@@ -10,6 +10,7 @@ namespace Domain.Repositories
     {
         //repo
         public IUserRepository UserRepository { get; }
+        public IRoleRepository RoleRepository { get; }
         //----
         Task BeginTransactionAsync();
         Task<int> CommitTransactionAsync();
