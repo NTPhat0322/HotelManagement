@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using System.Text;
+using System.Threading.RateLimiting;
 
 Env.Load();
 var builder = WebApplication.CreateBuilder(args);
@@ -90,6 +91,8 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
         options.PermitLimit = 10;
         options.Window = TimeSpan.FromSeconds(60);
         options.SegmentsPerWindow = 6;
+        options.QueueLimit = 2;
+        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
     });
     rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 });
