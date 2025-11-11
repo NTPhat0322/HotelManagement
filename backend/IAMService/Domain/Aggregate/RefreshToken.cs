@@ -15,7 +15,7 @@ namespace Domain.Aggregate
         public string RevokedReason { get; private set; } = string.Empty;
         public string ReplacedByHashedToken { get; private set; } = string.Empty;
         public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
-        public DateTime ExpiresAt { get; private set; } = DateTime.UtcNow.AddDays(30);
+        public DateTime ExpiresAt { get; private set; } = DateTime.UtcNow.AddDays(7);
         public string CreatedByIp { get; private set; } = string.Empty;
 
         //navigation property
@@ -23,6 +23,8 @@ namespace Domain.Aggregate
         public Guid UserId { get; private set; }
         [Required]
         public User User { get; private set; } = null!;
+
+        private RefreshToken() { }
 
         public RefreshToken(string hashedToken, User user)
         {
