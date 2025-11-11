@@ -24,6 +24,9 @@ namespace Domain.Aggregate
         public Guid RoleId { get; private set; }
         public Role Role { get; private set; } = null!;
 
+        private readonly List<RefreshToken> _refreshTokens = new();
+        public IReadOnlyCollection<RefreshToken> RefreshTokens => _refreshTokens.AsReadOnly();
+
         private User() { }
         public User(string email, string hashedPassword, string firstName, string lastName,
             string phoneNumber = "", DateTime? dateOfBirth = null, int number = 0, string street = "",
