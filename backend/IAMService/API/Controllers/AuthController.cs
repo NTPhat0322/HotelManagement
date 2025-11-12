@@ -17,6 +17,13 @@ namespace API.Controllers
                 : BadRequest(response);
         }
 
-
+        [HttpPost]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            var response = await userService.LoginAsync(request);
+            return response.IsSuccess 
+                ? Ok(response) 
+                : BadRequest(response);
+        }
     }
 }

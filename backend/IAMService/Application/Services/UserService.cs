@@ -14,6 +14,34 @@ namespace Application.Services
         {
             _unitOfWork = unitOfWork;
         }
+
+        public async Task<GenericResult<LoginResponse>> LoginAsync(LoginRequest request)
+        {
+            //tìm user theo email
+            var user = await _unitOfWork.UserRepository.GetUserByEmailAsync(request.PhoneNumOrEmail);
+            //nếu không tìm thấy thì tìm theo số điện thoại
+            if (user is null)
+            {
+                user = await _unitOfWork.UserRepository.GetUserByPhoneNumber(request.PhoneNumOrEmail);
+                if (user is null)
+                    return GenericResult<LoginResponse>.Failure("email or phone number does not exist.");
+            }
+            //đã tìm thấy user, kiểm tra password
+            bool isPasswordValid = PasswordHasher.VerifyPassword(request.Password, user.HashedPassword);
+            if (!isPasswordValid)
+                return GenericResult<LoginResponse>.Failure("password is not correct");
+            //tạo access token và refresh token
+            var accessToken = JwtHelper.CreateToken(user);
+            var refreshToken = RefreshTokenHelper.GenerateRefreshToken();
+
+            return GenericResult<LoginResponse>.Success( new LoginResponse
+            {
+                UserId = user.UserId.ToString(),
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+            }, "Login successfully.");
+        }
+
         public async Task<GenericResult<RegisterResponse>> RegisterUserAsync(RegisterRequest request)
         {
             await _unitOfWork.BeginTransactionAsync();
