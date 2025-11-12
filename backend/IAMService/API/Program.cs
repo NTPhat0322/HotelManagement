@@ -90,6 +90,7 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddTransient<IValidator<RegisterRequest>, RegisterUserValidator>();
 builder.Services.AddTransient<IValidator<CreateRoleRequest>, CreateRoleValidator>();
+builder.Services.AddTransient<IValidator<LoginRequest>, LoginValidator>();
 
 var app = builder.Build();
 

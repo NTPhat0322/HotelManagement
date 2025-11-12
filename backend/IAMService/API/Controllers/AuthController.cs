@@ -8,7 +8,7 @@ namespace API.Controllers
     [ApiController]
     public class AuthController(IUserService userService) : ControllerBase
     {
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterRequest request)
         {
             var response = await userService.RegisterUserAsync(request);
@@ -17,7 +17,7 @@ namespace API.Controllers
                 : BadRequest(response);
         }
 
-        [HttpPost]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             var response = await userService.LoginAsync(request);

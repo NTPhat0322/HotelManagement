@@ -16,14 +16,19 @@ namespace Infrastructure.Repositories
         {
         }
 
+        public override async Task<User?> GetByIdAsync(Guid id)
+        {
+            return await _dbSet.Include(u => u.Role).FirstOrDefaultAsync(u => u.UserId == id);
+        }
+
         public async Task<User?> GetUserByEmailAsync(string email)
         {
-            return await _dbSet.FirstOrDefaultAsync(u => u.Email == email);
+            return await _dbSet.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<User?> GetUserByPhoneNumber(string phoneNumber)
         {
-            return await _dbSet.FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+            return await _dbSet.Include(u => u.Role).FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
         }
     }
 }
