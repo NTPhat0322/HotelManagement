@@ -9,6 +9,7 @@ namespace Application.Helpers
 {
     public static class RefreshTokenHelper
     {
+        private static readonly string JwtKey = Environment.GetEnvironmentVariable("JWT_KEY")!;
         public static string GenerateRefreshToken()
         {
             var randomBytes = RandomNumberGenerator.GetBytes(64);
@@ -16,14 +17,29 @@ namespace Application.Helpers
             return token;
         }
 
-        public static string HashRefreshToken(string refreshToken)
+        public static string HashRefreshToken(string refreshTokenBase64)
         {
-            return BCrypt.Net.BCrypt.EnhancedHashPassword(refreshToken, 13);
+            //chuyển key từ string sang byte[]
+            byte[] keyBytes = Encoding.UTF8.GetBytes(JwtKey);
+            //chuyển refreshToken từ base64 string sang byte[]
+            byte[] tokenBytes = Convert.FromBase64String (refreshTokenBase64);
+        
+            using var hmac = new HMACSHA512(keyBytes);
+            //hash byte của token với key
+            byte[] hashTokenBytes = hmac.ComputeHash(tokenBytes);
+            //chuyển hash byte sang base64 string để lưu vào db
+            return Convert.ToBase64String(hashTokenBytes);
         }
 
-        public static bool VerifyRefreshToken(string refreshToken, string hashedRefreshToken)
+        public static bool VerifyRefreshToken(string refreshTokenBase64, string storedHashedToken)
         {
-            return BCrypt.Net.BCrypt.EnhancedVerify(refreshToken, hashedRefreshToken);
+            string hashedToken = HashRefreshToken(refreshTokenBase64);
+
+            byte[] a = Convert.FromBase64String(hashedToken);
+            byte[] b = Convert.FromBase64String(storedHashedToken);
+
+            //constant-time comparison to prevent timing attacks
+            return CryptographicOperations.FixedTimeEquals(a, b);
         }
 
 
