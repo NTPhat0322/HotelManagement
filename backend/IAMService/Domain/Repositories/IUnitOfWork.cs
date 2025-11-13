@@ -11,6 +11,7 @@ namespace Domain.Repositories
         //repo
         public IUserRepository UserRepository { get; }
         public IRoleRepository RoleRepository { get; }
+        public IRefreshTokenRepository RefreshTokenRepository { get; }
         //----
         Task BeginTransactionAsync();
         Task<int> CommitTransactionAsync();

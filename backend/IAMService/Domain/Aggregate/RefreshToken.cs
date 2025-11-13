@@ -5,9 +5,9 @@ namespace Domain.Aggregate
     public class RefreshToken
     {
         [Key]
-        public Guid RefreshTokenId { get; private set; } = new Guid();
+        public Guid RefreshTokenId { get; private set; } = Guid.NewGuid();
         public string HashedToken { get; private set; } = string.Empty;
-        public Guid FamilyId { get; private set; } = new Guid();
+        public Guid FamilyId { get; private set; } = Guid.NewGuid();
         public bool IsLatest { get; private set; } = true;
         public DateTime? UsedAt { get; private set; } = null;
         public bool IsRevoked { get; private set; } = false;
