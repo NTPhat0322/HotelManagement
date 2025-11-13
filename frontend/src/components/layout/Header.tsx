@@ -1,6 +1,6 @@
-import { Hotel } from "lucide-react";
+import { CircleUser, Hotel } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { Button, Box } from "@mui/material";
+import { Button } from "antd";
 
 const Header = () => {
   const location = useLocation();
@@ -9,66 +9,131 @@ const Header = () => {
     { label: "Trang chủ", path: "/" },
     { label: "Giới thiệu", path: "/about-us" },
     { label: "Tất cả phòng", path: "/room-information" },
-    // { label: "Phòng của tôi", path: "/room-information" },
-    // { label: "Phòng của tôi", path: "/room-information" },
   ];
 
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         position: "sticky",
         top: 0,
         zIndex: 1000,
         display: "flex",
         alignItems: "center",
-        gap: 3,
-        px: 2,
-        py: 1.5,
+        padding: "12px 24px",
         borderBottom: "1px solid #eee",
         backgroundColor: "#fff",
+        justifyContent: "space-between",
       }}
     >
-      <Button
-        component={Link}
-        to="/"
-        startIcon={<Hotel />}
-        sx={{
-          textTransform: "none",
-          color: "#1976d2",
-          fontWeight: "bold",
-          fontSize: "1rem",
+      {/* Logo */}
+      <div
+        className="flex"
+        style={{
+          gap: "24px",
         }}
       >
-        BookHotel.vn
-      </Button>
-
-      {menuItems.map((item) => {
-        const isActive = location.pathname === item.path;
-        return (
-          <Button
-            key={item.path}
-            component={Link}
-            to={item.path}
-            sx={{
-              textTransform: "none",
-              color: isActive ? "#000" : "#666",
-              fontWeight: isActive ? "bold" : "normal",
-              borderBottom: isActive
-                ? "2px solid #1976d2"
-                : "2px solid transparent",
-              borderRadius: 0,
-              transition: "all 0.2s ease",
-              "&:hover": {
-                color: "#1976d2",
-                backgroundColor: "transparent",
-              },
+        <Link
+          to="/"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            color: "black",
+            fontWeight: "bold",
+            fontSize: "1rem",
+            textDecoration: "none",
+          }}
+        >
+          <Hotel
+            size={20}
+            style={{
+              color: "black",
             }}
-          >
-            {item.label}
-          </Button>
-        );
-      })}
-    </Box>
+          />
+          BookHotel.vn
+        </Link>
+
+        {/* Menu Items */}
+        {menuItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              style={{
+                textDecoration: "none",
+              }}
+            >
+              <Button
+                type="link"
+                style={{
+                  textTransform: "none",
+                  color: isActive ? "white" : "#666",
+                  backgroundColor: isActive ? "black" : "white",
+                  fontWeight: isActive ? "bold" : "normal",
+                  borderBottom: isActive
+                    ? "2px solid #1677ff"
+                    : "2px solid transparent",
+                  borderRadius: "10px",
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = isActive
+                    ? "black"
+                    : "lightgray";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = isActive
+                    ? "black"
+                    : "white";
+                }}
+              >
+                {item.label}
+              </Button>
+            </Link>
+          );
+        })}
+      </div>
+
+      <div className="flex items-center gap-2">
+        <CircleUser size={30} />
+        <Button
+          type="link"
+          style={{
+            backgroundColor: "white",
+            color: "black",
+            fontWeight: "bold",
+            border: "1px solid",
+            boxShadow: "unset",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "lightgray";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "white";
+          }}
+        >
+          Đăng nhập
+        </Button>
+        <Button
+          type="link"
+          style={{
+            backgroundColor: "white",
+            color: "black",
+            fontWeight: "bold",
+            border: "1px solid",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "lightgray";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "white";
+          }}
+        >
+          Đăng ký
+        </Button>
+      </div>
+    </div>
   );
 };
 
