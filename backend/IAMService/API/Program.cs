@@ -86,12 +86,14 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
 //DI for FluentValidation
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddTransient<IValidator<RegisterRequest>, RegisterUserValidator>();
 builder.Services.AddTransient<IValidator<CreateRoleRequest>, CreateRoleValidator>();
 builder.Services.AddTransient<IValidator<LoginRequest>, LoginValidator>();
+builder.Services.AddTransient<IValidator<RefreshTokenRequest>, RefreshTokenValidator>();
 
 var app = builder.Build();
 

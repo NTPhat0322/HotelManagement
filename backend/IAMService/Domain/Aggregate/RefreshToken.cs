@@ -31,5 +31,17 @@ namespace Domain.Aggregate
             HashedToken = hashedToken;
             User = user;
         }
+        public void SetUsedAt(DateTime? dateTime = null)
+        {
+            UsedAt = dateTime ?? DateTime.UtcNow;
+        }
+
+        public void Revoke(string reason = "", DateTime? revokedAt = null, string replacedByHashedToken = "")
+        {
+            IsRevoked = true;
+            RevokedReason = reason;
+            RevokedAt = revokedAt ?? DateTime.UtcNow;
+            ReplacedByHashedToken = replacedByHashedToken;
+        }
     }
 }
