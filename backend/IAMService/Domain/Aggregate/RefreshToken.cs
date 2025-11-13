@@ -5,9 +5,9 @@ namespace Domain.Aggregate
     public class RefreshToken
     {
         [Key]
-        public Guid RefreshTokenId { get; private set; } = new Guid();
+        public Guid RefreshTokenId { get; private set; } = Guid.NewGuid();
         public string HashedToken { get; private set; } = string.Empty;
-        public Guid FamilyId { get; private set; } = new Guid();
+        public Guid FamilyId { get; private set; } = Guid.NewGuid();
         public bool IsLatest { get; private set; } = true;
         public DateTime? UsedAt { get; private set; } = null;
         public bool IsRevoked { get; private set; } = false;
@@ -30,6 +30,18 @@ namespace Domain.Aggregate
         {
             HashedToken = hashedToken;
             User = user;
+        }
+        public void SetUsedAt(DateTime? dateTime = null)
+        {
+            UsedAt = dateTime ?? DateTime.UtcNow;
+        }
+
+        public void Revoke(string reason = "", DateTime? revokedAt = null, string replacedByHashedToken = "")
+        {
+            IsRevoked = true;
+            RevokedReason = reason;
+            RevokedAt = revokedAt ?? DateTime.UtcNow;
+            ReplacedByHashedToken = replacedByHashedToken;
         }
     }
 }

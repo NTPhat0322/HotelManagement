@@ -32,6 +32,14 @@ namespace Infrastructure.Data
                     .WithMany(r => r.Users)
                     .HasForeignKey(u => u.RoleId);
             });
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.HasIndex(rf => rf.HashedToken).IsUnique();
+                entity.HasIndex(rf => new { rf.FamilyId, rf.IsLatest })
+                        .HasFilter("[IsLatest] = 1")
+                        .IsUnique();
+            });
+        
         }
     }
 }

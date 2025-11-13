@@ -7,6 +7,7 @@ namespace Application.Interfaces
 {
     public interface IUserService
     {
-        Task<GenericResult<RegisterResponse>> RegisterUserAsync(RegisterRequest request);
+        Task<Result> RegisterUserAsync(RegisterRequest request);
+        Task<GenericResult<LoginResponse>> LoginAsync(LoginRequest request);
     }
 }

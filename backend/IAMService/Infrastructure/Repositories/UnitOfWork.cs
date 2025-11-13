@@ -12,12 +12,13 @@ namespace Infrastructure.Repositories
 
         public IUserRepository UserRepository { get; }
         public IRoleRepository RoleRepository { get; }
-
-        public UnitOfWork(IAMServiceDbContext context, IUserRepository userRepository, IRoleRepository roleRepository)
+        public IRefreshTokenRepository RefreshTokenRepository { get; }
+        public UnitOfWork(IAMServiceDbContext context, IUserRepository userRepository, IRoleRepository roleRepository, IRefreshTokenRepository refreshTokenRepository)
         {
             _context = context;
             UserRepository = userRepository;
             RoleRepository = roleRepository;
+            RefreshTokenRepository = refreshTokenRepository;
         }
 
         public async Task BeginTransactionAsync()
