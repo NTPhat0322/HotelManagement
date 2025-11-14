@@ -31,6 +31,13 @@ namespace Domain.Aggregate
             HashedToken = hashedToken;
             User = user;
         }
+
+        public RefreshToken(string hashedToken, User user, Guid familyId)
+        {
+            HashedToken = hashedToken;
+            User = user;
+            FamilyId = familyId;
+        }
         public void SetUsedAt(DateTime? dateTime = null)
         {
             UsedAt = dateTime ?? DateTime.UtcNow;
@@ -42,6 +49,11 @@ namespace Domain.Aggregate
             RevokedReason = reason;
             RevokedAt = revokedAt ?? DateTime.UtcNow;
             ReplacedByHashedToken = replacedByHashedToken;
+        }
+
+        public void SetIsLatest(bool isLatest)
+        {
+            IsLatest = isLatest;
         }
     }
 }
