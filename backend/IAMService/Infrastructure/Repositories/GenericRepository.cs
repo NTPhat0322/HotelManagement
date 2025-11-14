@@ -20,8 +20,13 @@ namespace Infrastructure.Repositories
         public void Delete(T entity)
             => _dbSet.Remove(entity);
 
-        public virtual async Task<IEnumerable<T>> GetAllAsync()
-            => await _dbSet.AsNoTracking().ToListAsync();
+        public virtual async Task<IEnumerable<T>> GetAllAsync(bool tracking = false)
+        {
+            if (tracking)
+                return await _dbSet.ToListAsync();
+            return await _dbSet.AsNoTracking().ToListAsync();
+        }
+            
 
         public virtual async Task<T?> GetByIdAsync(Guid id)
             => await _dbSet.FindAsync(id);

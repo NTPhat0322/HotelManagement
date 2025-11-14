@@ -14,7 +14,7 @@ namespace Application.Services
             await _unitOfWork.BeginTransactionAsync();
 
             //get all refresh token
-            var refreshTokens = await _unitOfWork.RefreshTokenRepository.GetAllAsync();
+            var refreshTokens = await _unitOfWork.RefreshTokenRepository.GetAllAsync(true);
             //duyet qua toan bo de tim hashed refresh token
             RefreshToken? validToken = null;
             foreach (var token in refreshTokens)
@@ -39,6 +39,7 @@ namespace Application.Services
             {
                 //vô hiệu hóa toàn bộ family của rf token
                 await RevokeAllRefreshTokenByFamilyId(validToken.FamilyId.ToString(), "reuse-detection");
+                return GenericResult<RefreshTokenResponse>.Failure("reuse-detection");
             }
 
             //tìm user tương ứng của refresh token
@@ -48,16 +49,30 @@ namespace Application.Services
             
             //tao refresh token moi
             var newRefreshToken = RefreshTokenHelper.GenerateRefreshToken();
+            var hashedNewRefreshToken = RefreshTokenHelper.HashRefreshToken(newRefreshToken);
             var newAccessToken = JwtHelper.CreateToken(user);
 
+            //revoke old refresh token
+            RevokeRefreshToken(validToken, "Replaced by new token", hashedNewRefreshToken);
 
-            return GenericResult<RefreshTokenResponse>.Failure("Refresh token has expired.");
+            //tao refresh token entity de luu vao db
+            var newRefreshTokenEntity = new RefreshToken(hashedNewRefreshToken, user, validToken.FamilyId);
+            await _unitOfWork.RefreshTokenRepository.AddAsync(newRefreshTokenEntity);
+            int rs = await _unitOfWork.CommitTransactionAsync();
+
+            if(rs <= 0)
+                return GenericResult<RefreshTokenResponse>.Failure("Failed to saving new refresh token into database");
+
+            return GenericResult<RefreshTokenResponse>.Success(new RefreshTokenResponse() { 
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken
+            }, "refresh token successfully");
         }
     
         private async Task RevokeAllRefreshTokenByFamilyId(string familyId, string reason)
         {
             await _unitOfWork.BeginTransactionAsync();
-            var refreshTokens = await _unitOfWork.RefreshTokenRepository.GetAllAsync();
+            var refreshTokens = await _unitOfWork.RefreshTokenRepository.GetAllAsync(true);
             foreach (var refreshToken in refreshTokens)
             {
                 if(refreshToken.FamilyId.ToString() == familyId)
@@ -66,6 +81,16 @@ namespace Application.Services
                 }
             }
             await _unitOfWork.CommitTransactionAsync();
+        }
+
+        private void RevokeRefreshToken(RefreshToken refreshToken, string reason, string replacedByHashedToken = "")
+        {
+            //make it not latest
+            refreshToken.SetIsLatest(false);
+            //set used at
+            refreshToken.SetUsedAt(DateTime.UtcNow);
+            //revoke
+            refreshToken.Revoke(reason, DateTime.UtcNow, replacedByHashedToken);
         }
     }
 }
