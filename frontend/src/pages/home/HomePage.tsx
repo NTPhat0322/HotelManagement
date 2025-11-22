@@ -106,7 +106,7 @@ const HomePage = () => {
                 overflow: "hidden",
                 transition: "transform 0.3s, box-shadow 0.3s",
               }}
-              bodyStyle={{ padding: "16px" }}
+              styles={{ body: { padding: "16px" } }}
               cover={
                 <img
                   alt={i.name}

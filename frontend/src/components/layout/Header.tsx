@@ -50,7 +50,7 @@ const Header = () => {
               color: "black",
             }}
           />
-          BookHotel.vn
+          TiếnPhátHotel
         </Link>
 
         {/* Menu Items */}
@@ -96,42 +96,46 @@ const Header = () => {
       </div>
 
       <div className="flex items-center gap-2">
-        <CircleUser size={30} />
-        <Button
-          type="link"
-          style={{
-            backgroundColor: "white",
-            color: "black",
-            fontWeight: "bold",
-            border: "1px solid",
-            boxShadow: "unset",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "lightgray";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = "white";
-          }}
-        >
-          Đăng nhập
-        </Button>
-        <Button
-          type="link"
-          style={{
-            backgroundColor: "white",
-            color: "black",
-            fontWeight: "bold",
-            border: "1px solid",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "lightgray";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = "white";
-          }}
-        >
-          Đăng ký
-        </Button>
+        {/* <CircleUser size={30} /> */}
+        <Link to={"/login"}>
+          <Button
+            type="link"
+            style={{
+              backgroundColor: "white",
+              color: "black",
+              fontWeight: "bold",
+              border: "1px solid",
+              boxShadow: "unset",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "lightgray";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "white";
+            }}
+          >
+            Đăng nhập
+          </Button>
+        </Link>
+        <Link to={"/register"}>
+          <Button
+            type="link"
+            style={{
+              backgroundColor: "white",
+              color: "black",
+              fontWeight: "bold",
+              border: "1px solid",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "lightgray";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "white";
+            }}
+          >
+            Đăng ký
+          </Button>
+        </Link>
       </div>
     </div>
   );
