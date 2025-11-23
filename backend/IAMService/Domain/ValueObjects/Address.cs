@@ -1,38 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Domain.ValueObjects
 {
     public class Address
     {
-        public int Number { get; private set; } = 0;
-        public string Street { get; private set; } = string.Empty;
+        public string DetailAddress { get; private set; } = string.Empty;
+        public string Ward { get; private set; } = string.Empty;
         public string District { get; private set; } = string.Empty;
         public string City { get; private set; } = string.Empty;
-        public string Country { get; private set; } = string.Empty;
         private Address() { }
 
-        public Address(int number = 0, string street = "",
-            string district = "", string city = "", string country = "")
+        public Address(string detailAddress = "", string ward = "",
+            string district = "", string city = "")
         {
-            Number = number;
-            Street = street;
+            DetailAddress = detailAddress;
+            Ward = ward;
             District = district;
             City = city;
-            Country = country;
+
         }
-        //number setter
-        public void SetNumber(int number)
+        //detail address setter
+        public void SetDetailAddress(string detailAddress)
         {
-            Number = number;
+            DetailAddress = detailAddress;
         }
-        //street setter
-        public void SetStreet(string street)
+        //ward setter
+        public void SetWard(string ward)
         {
-            Street = street;
+            Ward = ward;
         }
         //district setter
         public void SetDistrict(string district)
@@ -43,9 +37,5 @@ namespace Domain.ValueObjects
         {
             City = city;
         }
-        public void SetCountry(string country)
-        {
-            Country = country;
-        }   
     }
 }
