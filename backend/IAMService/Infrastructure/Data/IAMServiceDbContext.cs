@@ -1,7 +1,6 @@
 ﻿using Domain.Aggregate;
 using Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
-using System.Net.NetworkInformation;
 
 namespace Infrastructure.Data
 {

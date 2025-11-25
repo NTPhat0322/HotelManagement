@@ -29,15 +29,15 @@ namespace Domain.Aggregate
 
         private User() { }
         public User(string email, string hashedPassword, string firstName, string lastName,
-            string phoneNumber = "", DateTime? dateOfBirth = null, int number = 0, string street = "",
-            string district = "", string city = "", string country = "")
+            string phoneNumber = "", DateTime? dateOfBirth = null, string detailAddress = "", string ward = "",
+            string district = "", string city = "")
         {
             Email = email;
             HashedPassword = hashedPassword;
             UserName = new FullName(firstName, lastName);
             PhoneNumber = phoneNumber;
             DateOfBirth = dateOfBirth;
-            Address = new Address(number, street, district, city, country);
+            Address = new Address(detailAddress, ward, district, city);
         }
 
         //email setter
@@ -66,14 +66,13 @@ namespace Domain.Aggregate
         {
             DateOfBirth = dateOfBirth;
         }
-        public void SetAddress(int number = 0, string street = "",
-            string district = "", string city = "", string country = "")
+        public void SetAddress(string detailAddress = "", string ward = "",
+            string district = "", string city = "")
         {
-            Address.SetNumber(number);
-            Address.SetStreet(street);
+            Address.SetDetailAddress(detailAddress);
+            Address.SetWard(ward);
             Address.SetDistrict(district);
             Address.SetCity(city);
-            Address.SetCountry(country);
         }
         public void SetRole(Role role)
         {

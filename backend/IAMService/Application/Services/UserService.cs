@@ -4,6 +4,7 @@ using Application.Helpers;
 using Application.Interfaces;
 using Domain.Aggregate;
 using Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services
 {
@@ -67,7 +68,7 @@ namespace Application.Services
             var hashedPassword = PasswordHasher.HashPassword(request.Password);
             //get role user
             var roleUser = await _unitOfWork.RoleRepository.GetRoleByNameAsync("User");
-            var newUser = new User(request.Email, hashedPassword, request.FirstName, request.LastName, request.PhoneNumber, request.DateOfBirth, request.AddressNumber ?? 0, request.Street, request.District, request.City, request.Country);
+            var newUser = new User(request.Email, hashedPassword, request.FirstName, request.LastName, request.PhoneNumber, request.DateOfBirth, request.Address, request.Ward, request.District, request.City);
             newUser.SetRole(roleUser!);
             //2. tạo refreshtoken
             //var refreshToken = RefreshTokenHelper.GenerateRefreshToken();
@@ -76,8 +77,8 @@ namespace Application.Services
             //lưu user vào database
             await _unitOfWork.UserRepository.AddAsync(newUser);
             int rs = await _unitOfWork.CommitTransactionAsync();
-            if(rs <= 0)
-                throw new Exception("Register user failed by saving db.");
+            if (rs <= 0)
+                throw new DbUpdateException("Register user failed by saving db.");
             
             return Result.Success("Register user successfully.");
         }
