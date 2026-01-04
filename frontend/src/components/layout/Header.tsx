@@ -1,6 +1,7 @@
-import { CircleUser, Hotel } from "lucide-react";
+import { Hotel, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { Button } from "antd";
+import { Button, Typography } from "antd";
+import { useAuth } from "../../auth/PrivateRoute";
 
 const Header = () => {
   const location = useLocation();
@@ -10,6 +11,7 @@ const Header = () => {
     { label: "Giới thiệu", path: "/about-us" },
     { label: "Tất cả phòng", path: "/room-information" },
   ];
+  const { user, isAuthenticated, logout } = useAuth();
 
   return (
     <div
@@ -95,48 +97,60 @@ const Header = () => {
         })}
       </div>
 
-      <div className="flex items-center gap-2">
-        {/* <CircleUser size={30} /> */}
-        <Link to={"/login"}>
-          <Button
-            type="link"
-            style={{
-              backgroundColor: "white",
-              color: "black",
-              fontWeight: "bold",
-              border: "1px solid",
-              boxShadow: "unset",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "lightgray";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "white";
-            }}
-          >
-            Đăng nhập
-          </Button>
-        </Link>
-        <Link to={"/register"}>
-          <Button
-            type="link"
-            style={{
-              backgroundColor: "white",
-              color: "black",
-              fontWeight: "bold",
-              border: "1px solid",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "lightgray";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "white";
-            }}
-          >
-            Đăng ký
-          </Button>
-        </Link>
-      </div>
+      {isAuthenticated && user ? (
+        <div className="flex gap-4 ">
+          <Typography className="flex gap-4">
+            <User size={25} /> Chào mừng bạn quay trở lại {user?.firstName}
+          </Typography>
+
+          <div>
+            <Button onClick={logout}>Đăng xuất</Button>
+          </div>
+        </div>
+      ) : (
+        <div className="flex items-center gap-2">
+          {/* <CircleUser size={30} /> */}
+          <Link to={"/login"}>
+            <Button
+              type="link"
+              style={{
+                backgroundColor: "white",
+                color: "black",
+                fontWeight: "bold",
+                border: "1px solid",
+                boxShadow: "unset",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "lightgray";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "white";
+              }}
+            >
+              Đăng nhập
+            </Button>
+          </Link>
+          <Link to={"/register"}>
+            <Button
+              type="link"
+              style={{
+                backgroundColor: "white",
+                color: "black",
+                fontWeight: "bold",
+                border: "1px solid",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "lightgray";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "white";
+              }}
+            >
+              Đăng ký
+            </Button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
