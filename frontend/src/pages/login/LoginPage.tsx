@@ -1,24 +1,32 @@
 import { Button, Input, Typography } from "antd";
 import { Hotel } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import type { UserLogin } from "../../types/User";
+import { Link, useNavigate } from "react-router-dom";
+import type { User } from "../../types/User";
+import type { LoginRequest } from "../../types/login/login";
+import { authService } from "../../services/auth.service";
+import { useAuth } from "../../auth/PrivateRoute";
 const { Text, Title } = Typography;
 const LoginPage = () => {
-  const [formData, setFormData] = useState<UserLogin | null>({
-    email: null,
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const [formData, setFormData] = useState<LoginRequest | null>({
+    username: null,
     password: null,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const checkValid = (email: string | null, password: string | null) => {
-    const clearEmail = email?.trim();
+  const checkValid = (username: string | null, password: string | null) => {
+    const clearUsername = username?.trim();
     const clearPassword = password?.trim();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const newError: Record<string, string> = {};
-    if (!clearEmail) {
-      newError.email = "Email không được để trống";
-    } else if (!emailRegex.test(clearEmail)) {
-      newError.email = "Không đúng định dạng email";
+    // if (!clearEmail) {
+    //   newError.email = "Email không được để trống";
+    // } else if (!emailRegex.test(clearEmail)) {
+    //   newError.email = "Không đúng định dạng email";
+    // }
+    if (!clearUsername) {
+      newError.username = "Password không được để trống";
     }
     if (!clearPassword) {
       newError.password = "Password không được để trống";
@@ -29,23 +37,31 @@ const LoginPage = () => {
     return Object.keys(newError).length === 0;
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!formData) {
       setErrors({ email: "Vui lòng nhập thông tin", password: "" });
       return;
     }
-    const emailForValidate = formData.email?.trim() ?? "";
+    const usernameForValidate = formData.username?.trim() ?? "";
     const passwordForValidate = formData.password?.trim() ?? "";
-    const valid = checkValid(emailForValidate, passwordForValidate);
+    const valid = checkValid(usernameForValidate, passwordForValidate);
     if (!valid) {
       return;
     }
-    const payload = {
-      email: emailForValidate,
-      password: passwordForValidate,
-    };
-
-    console.log(payload);
+    // const payload = {
+    //   username: usernameForValidate,
+    //   password: passwordForValidate,
+    // };
+    const res = await authService.login(
+      usernameForValidate,
+      passwordForValidate
+    );
+    if (!res) {
+      throw new Error("Lỗi không thể đăng nhập");
+    }
+    const { accessToken, refreshToken, ...userInfo } = res;
+    login(userInfo as User); // Chỉ cần gọi và truyền res vào thôi!
+    navigate("/");
   };
   return (
     <div className="w-full h-screen flex justify-center items-center">
@@ -83,22 +99,22 @@ const LoginPage = () => {
         </div>
         <div>
           <div className="mb-2.5">
-            <Title level={4}>Email hoặc Số điện thoại</Title>
+            <Title level={4}>username hoặc Số điện thoại</Title>
             <Input
               type="text"
               placeholder="Nhập email hoặc số điện thoại của bạn"
-              value={formData?.email || ""}
+              value={formData?.username || ""}
               onChange={(e) => {
-                setFormData({ ...formData!, email: e.target.value });
+                setFormData({ ...formData!, username: e.target.value });
               }}
-              status={errors.email ? "error" : ""}
+              status={errors.username ? "error" : ""}
             />
-            {errors.email && (
+            {errors.username && (
               <Text
                 type="danger"
                 style={{ fontSize: "12px", marginTop: "4px", display: "block" }}
               >
-                {errors.email}
+                {errors.username}
               </Text>
             )}
           </div>

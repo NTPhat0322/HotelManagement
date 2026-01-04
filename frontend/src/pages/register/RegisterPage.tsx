@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { authorizeAxiosInstance } from "../../utils/authorizeAxios";
 import { toast } from "react-toastify";
-import type { City, District, UserRegister, Ward } from "../../types/User";
+import type { City, District, User, Ward } from "../../types/User";
 const { Text, Title } = Typography;
 
 const RegisterPage = () => {
@@ -14,7 +14,7 @@ const RegisterPage = () => {
   const [cities, setCities] = useState<City[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
   const [ward, setWard] = useState<Ward[]>([]);
-  const [formData, setFormData] = useState<UserRegister | null>({
+  const [formData, setFormData] = useState<User | null>({
     firstName: null,
     lastName: null,
     phone: null,
@@ -86,7 +86,7 @@ const RegisterPage = () => {
     }
   }, [selectedDistrictID]);
 
-  const checkValid = (data: UserRegister) => {
+  const checkValid = (data: User) => {
     const clearEmail = data.email?.trim();
     const clearPassword = data.password?.trim();
     const clearFirstName = data.firstName?.trim();
